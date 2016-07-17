@@ -14,6 +14,7 @@ import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
 import rx.Subscription;
+import rx.functions.Action1;
 import rx.functions.Func0;
 import rx.functions.Func1;
 
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private Subscription timer_3;
     private Subscription filter;
     private Subscription repeat;
+    private Subscription defer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +35,36 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Rxjava_just();
         Rxjava_repeat();
-        Observable.defer(() -> Observable.just("defer")).subscribe(new Subscriber<String>() {
+        Rxjava_defer();
+        Rxjava_range();
+        Rxjava_interval();
+        Rxjava_timer_2();
+        Rxjava_timer_3();
+
+
+        Rxjava_filter();
+        Rxjava_take();
+
+        lambda();
+    }
+
+    private void Rxjava_take() {
+        Observable.just(1,2,3,4,5,6,7,8,9,10)
+                .take(4)
+                .takeLast(2)
+                .subscribe(integer -> {  Log.e("take------","="+integer);           });
+//        Observable.interval(1,TimeUnit.SECONDS)
+//                .take(2,TimeUnit.SECONDS).subscribe(new Action1<Long>() {
+//            @Override
+//            public void call(Long aLong) {
+//                Log.e("take------","="+aLong);
+//            }
+//        });
+
+    }
+
+    private void Rxjava_defer() {
+        defer= Observable.defer(() -> Observable.just("defer")).subscribe(new Subscriber<String>() {
             @Override
             public void onCompleted() {
                 Log.e("repeat------onCompleted","onCompleted");
@@ -49,13 +80,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("repeat---------OnNext","="+s);
             }
         });
-        Rxjava_range();
-        Rxjava_interval();
-        Rxjava_timer_2();
-        Rxjava_timer_3();
-        Rxjava_filter();
-
-        lambda();
     }
 
     private void Rxjava_repeat() {
@@ -96,12 +120,8 @@ public class MainActivity extends AppCompatActivity {
         list.add("one");
         list.add("two");
         list.add("owe");
-      filter=  Observable.from(list).filter(new Func1<String, Boolean>() {
-            @Override
-            public Boolean call(String s) {
-                return s.startsWith("o");
-            }
-        }).subscribe(new Subscriber<String>() {
+      filter=  Observable.from(list).filter(s -> s.startsWith("o"))
+              .filter(s->s.endsWith("e")).subscribe(new Subscriber<String>() {
             @Override
             public void onCompleted() {
                 Log.e("filter----onCompleted","onCompleted");
