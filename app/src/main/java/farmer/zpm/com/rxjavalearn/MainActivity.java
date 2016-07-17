@@ -45,8 +45,74 @@ public class MainActivity extends AppCompatActivity {
         Rxjava_filter();
         Rxjava_take();
         Rxjava_distinct();
-        
+        Rxjava_first();
+        Rxjava_skip();
+        Rxjava_elementAt();
+        Rxjava_sample();
+        Rxjava_debounce();
+        Rxjava_timeout();
         lambda();
+    }
+
+    private void Rxjava_debounce() {
+        Observable.interval(5, TimeUnit.SECONDS).debounce(3,TimeUnit.SECONDS).subscribe(new Action1<Long>() {
+            @Override
+            public void call(Long aLong) {
+                Log.e("debounce-----","="+aLong);
+            }
+        });
+    }
+
+    private void Rxjava_timeout() {
+        Observable.interval(5, TimeUnit.SECONDS).timeout(3,TimeUnit.SECONDS).subscribe(new Subscriber<Long>() {
+            @Override
+            public void onCompleted() {
+                Log.e("timeout----","onCompleted");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e("timeout----",e.getMessage());
+            }
+
+            @Override
+            public void onNext(Long aLong) {
+                Log.e("timeout----","="+aLong);
+            }
+        });
+    }
+
+    private void Rxjava_sample() {
+        Observable.just(1,2,3,4,5,6).sample(4, TimeUnit.SECONDS).subscribe(new Action1<Integer>() {
+            @Override
+            public void call(Integer integer) {
+                Log.e("sample------","="+integer);
+            }
+        });
+    }
+
+    private void Rxjava_elementAt() {
+        Observable.just(1,2,3,4,5,6,7).elementAt(3)
+                .subscribe(integer -> {
+                    Log.e("elementAt------","="+integer);
+                });
+    }
+
+    private void Rxjava_skip() {
+        Observable.just(1,2,3,4,5,6,7).skip(3)
+                .subscribe(integer -> {
+                    Log.e("skip------","="+integer);
+                });
+    }
+
+    private void Rxjava_first() {
+        Observable.just(1,2,3,4,5,6,7).first()
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        Log.e("first------","="+integer);
+                    }
+                });
     }
 
     private void Rxjava_distinct() {
