@@ -59,8 +59,44 @@ public class MainActivity extends AppCompatActivity {
 //        Rxjava_map();
 //        Rxjava_scan();
 //        Rxjava_groupby();
-        
+//        Rxjava_buffer();
+
+//        Rxjava_merge();
+        Observable.interval(2, TimeUnit.SECONDS)
+                .zipWith(Observable.just("one", "two"), new Func2<Long, String, String>() {
+                    @Override
+                    public String call(Long aLong, String s) {
+                        return aLong+"="+s;
+                    }
+                })
+                .subscribe(new Action1<String>() {
+            @Override
+            public void call(String s) {
+                Log.e("zipWith---",s);
+            }
+        });
+
         lambda();
+    }
+
+    private void Rxjava_merge() {
+        Observable.interval(2, TimeUnit.SECONDS)
+                .mergeWith(Observable.interval(1,TimeUnit.SECONDS))
+                .subscribe(new Action1<Long>() {
+                    @Override
+                    public void call(Long aLong) {
+                        Log.e("mergeWith---","="+aLong);
+                    }
+                });
+    }
+
+    private void Rxjava_buffer() {
+        Observable.just(1,2,3,4,5,6,7,8,9).buffer(4).subscribe(integers -> {
+            Log.e("buffer---","size="+integers.size());
+            for (int i:integers ) {
+                Log.e("buffer---","i="+i);
+            }
+        });
     }
 
     private void Rxjava_groupby() {
