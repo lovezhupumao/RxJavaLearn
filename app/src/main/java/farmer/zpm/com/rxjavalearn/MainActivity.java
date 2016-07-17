@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Range;
+import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -382,7 +383,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void lambda() {
         TextView textView=(TextView)findViewById(R.id.text);
-        textView.setOnClickListener(view -> Log.e("hello","-----------1"));
+        textView.setOnClickListener(view -> Log.e("hello", "-----------1"));
     }
 
     protected void Rxjava_just() {

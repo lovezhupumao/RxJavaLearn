@@ -1,4 +1,3 @@
-apply plugin: 'com.android.application'
 apply plugin: 'com.android.application' //or apply plugin: 'java'
 apply plugin: 'me.tatarka.retrolambda'
 android {
