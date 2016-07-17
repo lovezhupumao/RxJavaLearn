@@ -17,6 +17,8 @@ import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func0;
 import rx.functions.Func1;
+import rx.functions.Func2;
+import rx.observables.GroupedObservable;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,29 +35,83 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Rxjava_just();
-        Rxjava_repeat();
-        Rxjava_defer();
-        Rxjava_range();
-        Rxjava_interval();
-        Rxjava_timer_2();
-        Rxjava_timer_3();
+//        Rxjava_just();
+//        Rxjava_from();
+//        Rxjava_repeat();
+//        Rxjava_defer();
+//        Rxjava_range();
+//        Rxjava_interval();
+//        Rxjava_timer_2();
+//        Rxjava_timer_3();
+//
+//
+//        Rxjava_filter();
+//        Rxjava_take();
+//        Rxjava_distinct();
+//        Rxjava_first();
+//        Rxjava_skip();
+//        Rxjava_elementAt();
+//        Rxjava_sample();
+//        Rxjava_debounce();
+//        Rxjava_timeout();
 
 
-        Rxjava_filter();
-        Rxjava_take();
-        Rxjava_distinct();
-        Rxjava_first();
-        Rxjava_skip();
-        Rxjava_elementAt();
-        Rxjava_sample();
-        Rxjava_debounce();
-        Rxjava_timeout();
+//        Rxjava_map();
+//        Rxjava_scan();
+//        Rxjava_groupby();
+        
         lambda();
     }
 
+    private void Rxjava_groupby() {
+        Observable.just(1,2,3,4,5,6,7,8,9)
+                .groupBy(integer -> integer%3)
+                .subscribe(result -> { result.subscribe(integer -> {
+                Log.e("groupBy","key="+result.getKey()+"--value"+integer);
+            });
+        });
+    }
+
+    private void Rxjava_scan() {
+        Observable.just(1,2,3,4).scan((integer, integer2) -> integer+integer2)
+                .subscribe(integer -> {
+                    Log.e("scan----","="+integer);
+                });
+    }
+
+    private void Rxjava_map() {
+        Observable.just(1,2,3,4)
+                .map(integer -> integer*10)
+                .subscribe(integer -> {
+                    Log.i("map------","="+integer);});
+    }
+
+    private void Rxjava_from() {
+        List<String> list=new ArrayList<String>();
+        list.add("on");
+        list.add("one");
+        list.add("two");
+        list.add("owe");
+        Observable.from(list).subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.e("from----onCompleted","onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("from---onError",e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        Log.i("from----OnNext","="+s);
+                    }
+                });
+    }
+
     private void Rxjava_debounce() {
-        Observable.interval(5, TimeUnit.SECONDS).debounce(3,TimeUnit.SECONDS).subscribe(new Action1<Long>() {
+        Observable.interval(5, TimeUnit.SECONDS).debounce(2,TimeUnit.SECONDS).subscribe(new Action1<Long>() {
             @Override
             public void call(Long aLong) {
                 Log.e("debounce-----","="+aLong);
@@ -72,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onError(Throwable e) {
-                Log.e("timeout----",e.getMessage());
+                Log.e("timeout----","onError");
             }
 
             @Override
@@ -83,10 +139,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void Rxjava_sample() {
-        Observable.just(1,2,3,4,5,6).sample(4, TimeUnit.SECONDS).subscribe(new Action1<Integer>() {
+        Observable.interval(4,TimeUnit.SECONDS).sample(1, TimeUnit.SECONDS).subscribe(new Action1<Long>() {
             @Override
-            public void call(Integer integer) {
-                Log.e("sample------","="+integer);
+            public void call(Long along) {
+                Log.e("sample------","="+along);
             }
         });
     }
