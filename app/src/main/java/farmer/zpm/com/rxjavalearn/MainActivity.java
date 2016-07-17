@@ -44,8 +44,18 @@ public class MainActivity extends AppCompatActivity {
 
         Rxjava_filter();
         Rxjava_take();
-
+        Rxjava_distinct();
+        
         lambda();
+    }
+
+    private void Rxjava_distinct() {
+        Observable.just(1,2,1,1,3,4,5).distinct().subscribe(integer -> {
+            Log.e("distinct---","="+integer);
+        });
+        Observable.just(1,2,1,1,3,4,5).distinctUntilChanged().subscribe(integer -> {
+            Log.e("distinctUntilChanged--","="+integer);
+        });
     }
 
     private void Rxjava_take() {
@@ -67,17 +77,17 @@ public class MainActivity extends AppCompatActivity {
         defer= Observable.defer(() -> Observable.just("defer")).subscribe(new Subscriber<String>() {
             @Override
             public void onCompleted() {
-                Log.e("repeat------onCompleted","onCompleted");
+                Log.e("defer------onCompleted","onCompleted");
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.e("repeat---------onError",e.getMessage());
+                Log.e("defer---------onError",e.getMessage());
             }
 
             @Override
             public void onNext(String s) {
-                Log.e("repeat---------OnNext","="+s);
+                Log.e("defer---------OnNext","="+s);
             }
         });
     }
